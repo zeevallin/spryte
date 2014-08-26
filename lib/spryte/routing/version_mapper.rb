@@ -5,8 +5,7 @@ module Spryte
       extend ActiveSupport::Concern
 
       def version(number, &block)
-        namespace (v_string = [ "v", number ].join), defaults: { format: "json" }, &block
-        match "/*path", to: [ v_string, "base#not_found" ].join("/"), via: :all, defaults: { format: "json" }
+        namespace [ "v", number ].join, defaults: { format: "json" }, format: false, &block
       end
 
     end
