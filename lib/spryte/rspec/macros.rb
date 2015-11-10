@@ -2,6 +2,8 @@ module Spryte
   module RSpec
     module Macros
 
+      class InvalidHTTPVerb < StandardError; end
+
       def host(domain)
         before(:each) { self.host = domain }
       end
@@ -25,6 +27,7 @@ module Spryte
       end
 
       def method(verb)
+        raise InvalidHTTPVerb, invalid_http_verb_message(verb) unless valid_http_verb?(verb)
         let(:method) { verb.to_sym }
       end
 
@@ -44,6 +47,31 @@ module Spryte
         end
       end
 
+      private def valid_http_verb?(verb)
+        VALID_HTTP_VERBS.include?(verb)
+      end
+
+      private def invalid_http_verb_message(verb)
+        "#{verb} is not a valid http verb.\nValid verbs are:\n#{VALID_HTTP_VERBS.map(&:inspect).join("\n")}"
+      end
+
+      VALID_HTTP_VERBS = [
+        :get,
+        :head,
+        :post,
+        :patch,
+        :put,
+        :proppatch,
+        :lock,
+        :unlock,
+        :options,
+        :propfind,
+        :delete,
+        :move,
+        :copy,
+        :mkcol,
+        :trace,
+      ]
     end
   end
 end
