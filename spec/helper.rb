@@ -21,4 +21,21 @@ RSpec.configure do |config|
 
   Kernel.srand config.seed
 
+  $original_stderr = $stderr
+  $original_stdout = $stdout
+
+  def disable_output(&blk)
+    $stderr = File.open(File::NULL, "w")
+    $stdout = File.open(File::NULL, "w")
+    if block_given?
+      yield
+      enable_output
+    end
+  end
+
+  def enable_output
+    $stderr = $original_stderr
+    $stdout = $original_stdout
+  end
+
 end
