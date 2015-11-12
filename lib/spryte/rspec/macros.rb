@@ -26,9 +26,15 @@ module Spryte
         }
       end
 
-      def method(verb)
+      def through(verb)
         raise InvalidHTTPVerb, invalid_http_verb_message(verb) unless valid_http_verb?(verb)
-        let(:method) { verb.to_sym }
+        let(:through) { verb.to_sym }
+        let(:method) { through }
+      end
+
+      def method(verb)
+        warn "#{ Kernel.caller.first }: `#method' is deprecated due to a collision with Object#method in ruby core, please use `#through' instead."
+        through(verb)
       end
 
       def path(name)
