@@ -2,8 +2,9 @@ require "spryte/rspec"
 
 class RSpecContextMock
   include Spryte::RSpec::Macros
-  def let(*args)
-  end
+  def let(*args); end
+  def before(*args); end
+  def subject(*args); end
 end
 
 RSpec.describe Spryte::RSpec do
@@ -43,6 +44,20 @@ RSpec.describe Spryte::RSpec do
 
     describe "#through" do
       it_behaves_like "setting http method verbs for rspec request specs", :through
+    end
+
+    describe "#request" do
+      it "sets the right let variables" do
+        disable_output do
+          aggregate_failures do
+            expect(rspec).to receive(:let).with(:path).once
+            expect(rspec).to receive(:let).with(:params).once
+            expect(rspec).to receive(:let).with(:headers).once
+            expect(rspec).to receive(:let).with(:method).once
+            rspec.request(:my_awesome_request)
+          end
+        end
+      end
     end
 
   end
