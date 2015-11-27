@@ -12,7 +12,8 @@ module Spryte
 
         host ENV.fetch("SPRYTE_RSPEC_HOST", "localhost")
 
-        let(:method) { :get }
+        let(:through) { :get }
+        let(:method) { method(:get) }
         let(:path) { "/" }
         let(:params) { Hash[] }
         let(:headers) { {
@@ -21,8 +22,8 @@ module Spryte
         } }
 
         subject(name) {
-          parameters = [ :get ].include?(method) ? params : params.to_json
-          send method, path.to_s, parameters, headers
+          parameters = [ :get ].include?(through) ? params : params.to_json
+          send through, path.to_s, parameters, headers
         }
       end
 

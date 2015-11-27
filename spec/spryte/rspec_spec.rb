@@ -54,6 +54,7 @@ RSpec.describe Spryte::RSpec do
             expect(rspec).to receive(:let).with(:params).once
             expect(rspec).to receive(:let).with(:headers).once
             expect(rspec).to receive(:let).with(:method).once
+            expect(rspec).to receive(:let).with(:through).once
             rspec.request(:my_awesome_request)
           end
         end
