@@ -12,8 +12,8 @@ module Spryte
 
         host ENV.fetch("SPRYTE_RSPEC_HOST", "localhost")
 
-        let(:through) { :get }
-        let(:method) { method(:get) }
+        through(:get)
+
         let(:path) { "/" }
         let(:params) { Hash[] }
         let(:headers) { {
