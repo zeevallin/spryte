@@ -12,7 +12,7 @@ module Spryte
 
         host ENV.fetch("SPRYTE_RSPEC_HOST", "localhost")
 
-        let(:method) { :get }
+        through(:get)
         let(:path) { "/" }
         let(:params) { Hash[] }
         let(:headers) { {
@@ -21,20 +21,22 @@ module Spryte
         } }
 
         subject(name) {
-          parameters = [ :get ].include?(method) ? params : params.to_json
-          send method, path.to_s, parameters, headers
+          parameters = [ :get ].include?(through) ? params : params.to_json
+          send through, path.to_s, parameters, headers
         }
       end
 
       def through(verb)
         raise InvalidHTTPVerb, invalid_http_verb_message(verb) unless valid_http_verb?(verb)
         let(:through) { verb.to_sym }
-        let(:method) { through }
+        let(:method) {
+          __deprecation_warning
+          through
+        }
       end
 
-      def method(verb)
+      def __deprecation_warning
         warn "#{ Kernel.caller.first }: `#method' is deprecated due to a collision with Object#method in ruby core, please use `#through' instead."
-        through(verb)
       end
 
       def path(name)
