@@ -35,11 +35,6 @@ module Spryte
         }
       end
 
-      def method(verb)
-        __deprecation_warning
-        through(verb)
-      end
-
       def __deprecation_warning
         warn "#{ Kernel.caller.first }: `#method' is deprecated due to a collision with Object#method in ruby core, please use `#through' instead."
       end

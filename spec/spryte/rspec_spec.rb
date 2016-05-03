@@ -28,20 +28,6 @@ RSpec.describe Spryte::RSpec do
       end
     end
 
-    describe "#method" do
-      it_behaves_like "setting http method verbs for rspec request specs", :method
-      it "shows a deprecation warning pointing to using #through" do
-        expect { rspec.method(:get) }.to output(/#through/).to_stderr
-      end
-      context "when the major version of spryte is greater than 0" do
-        it "does not respond to #method since it was deprecated" do
-          if Integer(Spryte::MAJOR) > 0
-            expect(Spryte::RSpec::Macros.instance_methods).to_not include :method
-          end
-        end
-      end
-    end
-
     describe "#through" do
       it_behaves_like "setting http method verbs for rspec request specs", :through
     end
