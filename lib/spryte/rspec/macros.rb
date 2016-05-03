@@ -12,8 +12,7 @@ module Spryte
 
         host ENV.fetch("SPRYTE_RSPEC_HOST", "localhost")
 
-        let(:through) { :get }
-        let(:method) { method(:get) }
+        through(:get)
         let(:path) { "/" }
         let(:params) { Hash[] }
         let(:headers) { {
@@ -30,12 +29,19 @@ module Spryte
       def through(verb)
         raise InvalidHTTPVerb, invalid_http_verb_message(verb) unless valid_http_verb?(verb)
         let(:through) { verb.to_sym }
-        let(:method) { through }
+        let(:method) {
+          __deprecation_warning
+          through
+        }
       end
 
       def method(verb)
-        warn "#{ Kernel.caller.first }: `#method' is deprecated due to a collision with Object#method in ruby core, please use `#through' instead."
+        __deprecation_warning
         through(verb)
+      end
+
+      def __deprecation_warning
+        warn "#{ Kernel.caller.first }: `#method' is deprecated due to a collision with Object#method in ruby core, please use `#through' instead."
       end
 
       def path(name)
